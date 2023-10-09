@@ -77,6 +77,8 @@ export class UserService {
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
+    } else if (user.isDisabled) {
+      throw new UnauthorizedException('User is disabled');
     }
 
     const token = jwt.sign(
