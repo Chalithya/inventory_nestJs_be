@@ -32,7 +32,6 @@ export class ItemService {
   async findAll() {
     try {
       const items = await this.itemRepository.find();
-
       return items;
     } catch (error) {
       throw error;

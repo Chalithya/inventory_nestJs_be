@@ -7,6 +7,7 @@ import {
   Res,
   Put,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -58,5 +59,13 @@ export class UserController {
   ) {
     const item = await this.userService.update(username, dto);
     return res.json({ data: item, success: true });
+  }
+
+  @Delete(':username')
+  @Roles(UserRole.Admin)
+  @UseGuards(RoleGuard)
+  async deleteUser(@Param('username') username: string, @Res() res: Response) {
+    const deletedUser = await this.userService.delete(username);
+    return res.json({ data: deletedUser, success: true });
   }
 }
