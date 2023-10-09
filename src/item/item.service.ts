@@ -66,4 +66,20 @@ export class ItemService {
       throw error;
     }
   }
+
+  async delete(name: string) {
+    try {
+      const item = await this.itemRepository.findOne({ where: { name } });
+
+      if (!item) {
+        throw new NotFoundException('Item not found');
+      }
+
+      await this.itemRepository.remove(item);
+
+      return item;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

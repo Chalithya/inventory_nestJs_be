@@ -7,6 +7,7 @@ import {
   Res,
   Put,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dtos/create-item.dto';
@@ -49,6 +50,14 @@ export class ItemController {
     @Res() res: Response,
   ) {
     const item = await this.itemService.update(name, dto);
+    return res.json({ data: item, success: true });
+  }
+
+  @Delete(':name')
+  @Roles(UserRole.Manager)
+  @UseGuards(RoleGuard)
+  async deleteItem(@Param('name') name: string, @Res() res: Response) {
+    const item = await this.itemService.delete(name);
     return res.json({ data: item, success: true });
   }
 }
