@@ -1,14 +1,15 @@
 import { IsString, IsBoolean } from 'class-validator';
+import { UserRole } from '../user-role.enum';
 
 export class UpdateUserDto {
   @IsString()
   readonly username: string;
 
   @IsString()
-  readonly password: string;
+  password: string;
 
   @IsString()
-  readonly role: string;
+  readonly role: UserRole;
 
   @IsBoolean()
   readonly isDisabled: boolean;

@@ -1,14 +1,28 @@
-import { Controller, Post, Body, Get, Param, Res, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Res,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dtos/create-item.dto';
 import { Response } from 'express';
 import { UpdateItemDto } from './dtos/update-item.dto';
+import { Roles } from 'src/utils/role.decorator';
+import { UserRole } from 'src/user/user-role.enum';
+import { RoleGuard } from 'src/utils/role.guard';
 
 @Controller('item')
 export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Post()
+  @Roles(UserRole.Manager)
+  @UseGuards(RoleGuard)
   async createItem(@Body() createItemDto: CreateItemDto, @Res() res: Response) {
     const item = await this.itemService.create(createItemDto);
     return res.json({ data: item, success: true });
@@ -27,6 +41,8 @@ export class ItemController {
   }
 
   @Put(':name')
+  @Roles(UserRole.Manager)
+  @UseGuards(RoleGuard)
   async updateItem(
     @Param('name') name: string,
     @Body() dto: UpdateItemDto,

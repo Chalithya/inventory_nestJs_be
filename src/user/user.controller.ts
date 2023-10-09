@@ -1,9 +1,21 @@
-import { Controller, Post, Body, Get, Param, Res, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Res,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { Response } from 'express';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { Roles } from 'src/utils/role.decorator';
+import { UserRole } from './user-role.enum';
+import { RoleGuard } from 'src/utils/role.guard';
 
 @Controller('user')
 export class UserController {
@@ -37,6 +49,8 @@ export class UserController {
   }
 
   @Put(':username')
+  @Roles(UserRole.Admin)
+  @UseGuards(RoleGuard)
   async updateItem(
     @Param('username') username: string,
     @Body() dto: UpdateUserDto,

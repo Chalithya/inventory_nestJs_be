@@ -82,7 +82,7 @@ export class UserService {
     }
 
     const token = jwt.sign(
-      { sub: user.id, username: user.username },
+      { sub: user.id, username: user.username, role: user.role },
       'secretsecretsecretsecretsecretsecret',
       {
         expiresIn: '1h',
@@ -96,6 +96,7 @@ export class UserService {
 
   async update(username: string, dto: UpdateUserDto) {
     try {
+      dto.password = await bcrypt.hash(dto.password, 10);
       const user = await this.userRepository.findOne({ where: { username } });
 
       if (!user) {

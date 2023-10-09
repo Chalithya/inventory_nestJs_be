@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { UserRole } from '../user-role.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -14,7 +15,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  readonly role: string;
+  readonly role: UserRole;
 
   @IsBoolean()
   readonly isDisabled: boolean;
