@@ -1,8 +1,9 @@
-import { Controller, Post, Body, Get, Param, Res } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Res, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { Response } from 'express';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -33,5 +34,15 @@ export class UserController {
 
     res.cookie('token', token, { httpOnly: true });
     return res.json({ data: user, success: true });
+  }
+
+  @Put(':username')
+  async updateItem(
+    @Param('username') username: string,
+    @Body() dto: UpdateUserDto,
+    @Res() res: Response,
+  ) {
+    const item = await this.userService.update(username, dto);
+    return res.json({ data: item, success: true });
   }
 }
